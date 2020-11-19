@@ -388,3 +388,38 @@ Es un sistema de control de versiones que originalmente fue diseñado para opera
 
 esto es el nuevo contenido 
 este es el cambio desde la web
+
+
+
+# El error de Git "fatal: negarse a fusionar historias no relacionadas"
+
+GitErrorGit PullHistorias no relacionadasGit Merge
+
+![Equipo Edpresso](https://www.educative.io/cdn-cgi/image/f=auto,fit=cover,w=32,h=32/v2api/author/profile/6547532599525376/image/5933301341618176)
+
+Equipo Edpresso
+
+
+
+
+
+
+
+------
+
+El error de Git **“fatal: negarse a fusionar historias no relacionadas”** ocurre cuando se fusionan dos proyectos *no relacionados* (es decir, proyectos que no son conscientes de la existencia del otro y tienen historiales de confirmaciones que no coinciden).
+
+![visor de svg](https://www.educative.io/api/edpresso/shot/4755609222119424/image/5534126872461312)
+
+Considere los siguientes dos casos que arrojan este error:
+
+- Ha clonado un proyecto y, de alguna manera, el `.git`directorio se eliminó o se corrompió. Esto hace que Git desconozca su historial local y, por lo tanto, generará este error cuando intente *presionar* o *extraer del* repositorio remoto.
+- Ha creado un nuevo repositorio, le ha agregado algunas *confirmaciones* y ahora está intentando *extraer* de un repositorio remoto que ya tiene algunas confirmaciones propias. Git también arrojará el error en este caso, ya que no tiene idea de cómo se relacionan los dos proyectos.
+
+## Solución
+
+El error se resuelve alternando el interruptor *permitir-historiales no relacionados* . Después de un comando `git pull`o `git merge`, agregue la siguiente etiqueta:
+
+```git
+git pull origin master --allow-unrelated-histories
+```
