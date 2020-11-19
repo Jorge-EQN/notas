@@ -423,3 +423,165 @@ El error se resuelve alternando el interruptor *permitir-historiales no relacion
 ```git
 git pull origin master --allow-unrelated-histories
 ```
+
+
+
+**Nota:** Ten en cuenta que este artículo es un tanto avanzado, pensado para personas que ya trabajan con Git. Puedes aprender cosas más básicas que damos por sabidas aquí en el [Manual de Git](https://desarrolloweb.com/manuales/manual-de-git.html).
+
+## Git branch
+
+El comando `git branch` es el que usaremos principalmente para trabajar con la creación de ramas, borrado de ramas y demás. Sin embargo, no es el único comando para la operativa que veremos en este artículo, ya que existen otros subcomandos de Git útiles y necesarios para trabajar con ramas, como `checkout` para moverse entre ramas o `merge` para fusionar ramas.
+
+Puedes comenzar tu primera práctica para trabajar con ramas. Haremos algo tan sencillo como lanzar el comando "`git branch`" a secas. Esto nos dará el listado de ramas que tengamos en un proyecto. Pero hay que advertir que las ramas de un repositorio local pueden ser distintas de las ramas de un repositorio remoto. Por ejemplo, cuando clonas un repositorio de GitHub generalmente estás clonando únicamente la rama master y no todas las ramas que se hayan creado a lo largo del tiempo. Otro ejemplo es cuando creas una rama en tu repositorio local. En este caso la rama la tendrás simplemente en tu proyecto local y no se subirá al repositorio remoto hasta que no lo especifiques. Ovbiamente, todas estas cosas, y otras, son las que vamos a ver en este artículo.
+
+## La rama master
+
+Cuando inicializamos un proyecto con Git automáticamente nos encontramos en una rama a la que se denomina "master".
+
+**Puedes ver las rama en la que te encuentras** en cada instante con el comando:
+
+```git
+git branch
+```
+
+Esta rama es la principal de tu proyecto y a partir de la que podrás crear nuevas ramas cuando lo necesites.
+
+Si has hecho algún commit en tu repositorio observarás que después de lanzar el comando "git branch" nos informa el nombre de la rama como "master".
+
+![img](https://desarrolloweb.com/archivoimg/general/3976.png)
+
+**Nota:** Si no has hecho un commit en tu proyecto observarás que no se ha creado todavía ninguna rama y que el comando branch no produce ninguna salida.
+
+## Crear una rama nueva
+
+El procedimiento para crear una nueva rama es bien simple. Usando el comando branch, seguido del nombre de la rama que queremos crear.
+
+```git
+git branch experimental
+```
+
+Este comando en sí no produce ninguna salida, pero podrías ver las "branches" de un proyecto con el comando "`git branch`", u obtener una descripción más detallada de las ramas con este otro comando:
+
+```git
+git show-branch
+```
+
+Esto nos muestra todas las ramas del proyecto con sus commits realizados. La salida sería como la de la siguiente imagen.
+
+![img](https://desarrolloweb.com/archivoimg/general/3977.png)
+
+## Pasar de una rama a otra
+
+Para moverse entre ramas usamos el comando `"git checkout`" seguido del nombre de la rama que queremos que sea la activa.
+
+```git
+git checkout experimental
+```
+
+esta sencilla operación tiene mucha potencia, porque nos cambiará automáticamente todos los archivos de nuestro proyecto, los de todas las carpetas, para que tengan el contenido en el que se encuentren en la correspondiente rama.
+
+De momento en nuestro ejemplo las dos ramas tenían exactamente el mismo contenido, pero ahora podríamos empezar a hacer cambios en el proyecto experimental y sus correspondientes commit y entonces los archivos tendrán códigos diferentes, de modo que puedas ver que al pasar de una rama a otra hay cambios en los archivos.
+
+Si estando en la rama experimental haces un par de commit, observarás que al hacer el show-branches te mostrará nuevos datos:
+
+![img](https://desarrolloweb.com/archivoimg/general/3978.png)
+
+El comando checkout tiene la posibilidad de permitirte crear una rama nueva y moverte a ella en un único paso. Para crear una nueva rama y situarte sobre ella tendrás que darle un nombre y usar el parámetro -b.
+
+```git
+git checkout -b otrarama
+```
+
+Como salida obtendrás el mensaje Switched to a new branch 'otrarama'. Eso quiere decir que, además de crear la rama, nuestra cabecera está apuntando hacia esta nueva branch.
+
+Si te dedicas a editar tus ficheros, crear nuevos archivos y demás en las distintas ramas entonces podrás observar que al moverte de una a otra con `checkout` el proyecto cambia automáticamente en tu editor, mostrando el estado actual en cada una de las ramas donde te estás situando. Es algo divertido y, si eres nuevo en Git verás que es una magia que resulta bastante sorprendente.
+
+Como estás entendiendo, el proyecto puede tener varios estados en un momento dado y tú podrás moverte de uno a otro con total libertad y sin tener que cambiar de carpeta ni nada parecido. Si usas un programa de interfaz gráfica de Git, como SourceTree o cualquier otro, podrás ver las ramas en un esquema gráfico más entendible que en la consola de comandos.
+
+![img](https://desarrolloweb.com/archivoimg/general/3979.png)
+
+## Fusionar ramas
+
+A medida que crees ramas y cambies el estado del las carpetas o archivos tu proyecto empezará a divergir de una rama a otra. Llegará el momento en el que te interese fusionar ramas para poder incorporar el trabajo realizado a la rama master.
+
+El proceso de fusionado se conoce como "merge" y puede llegar a ser muy simple o más complejo si se encuentran cambios que Git no pueda procesar de manera automática. Git para procesar los merge usa un antecesor común y comprueba los cambios que se han introducido al proyecto desde entonces, combinando el código de ambas ramas.
+
+Para hacer un merge nos situamos en una rama, en este caso la "master", y decimos con qué otra rama se debe fusionar el código.
+
+El siguiente comando, lanzado desde la rama "master", permite fusionarla con la rama "experimental".
+
+```git
+git merge experimental
+```
+
+Un merge necesita un mensaje, igual que ocurre con los commit, por lo que al realizar ese comando se abrirá "Vim" (o cualquioer otro editor de consola que tengas configurado) para que introduzcas los comentarios que juzgues oportuno. Salir de Vim lo consigues pulsando la tecla ESC y luego escribiendo ":q" y pulsando enter para aceptar ese comando. Esta operativa de indicar el mensaje se puede resumir con el comando:
+
+```git
+git merge experimental -m 'Esto es un merge con mensaje'
+```
+
+En la siguiente imagen puedes ver una secuencia de comandos y su salida. Primero el cambio a la rama master "git checkout master", luego el "git branch" para confirmar en qué rama nos encontramos y por último el merge para fusionarla con la rama experimental.
+
+![img](https://desarrolloweb.com/archivoimg/general/3980.png)
+
+Luego podremos comprobar que nuestra rama master tiene todo el código nuevo de la rama experimental y podremos hacer nuevos commits en master para seguir el desarrollo de nuestro proyecto ya con la rama principal, si es nuestro deseo.
+
+Si tenemos un programa de Git por interfaz gráfica podremos ver el diagrama con el combinado de las ramas.
+
+![img](https://desarrolloweb.com/archivoimg/general/3981.png)
+
+### Fusionar los cambios de master en la rama en desarrollo
+
+Durante tu trabajo en el desarrollo del proyecto gestionado con Git también puede ser normal que se vayan haciendo cambios en la rama master, o en otras ramas en desarrollo, y quieras traerlos para tu rama actual. Por ejemplo, la rama experimental está tardando varios días o semanas en completarse y mientras tanto han agregado nuevas features que quieras que esté disponibles también en la rama experimental.
+
+Entonces seguramente querrás traerte los cambios de la rama master. Para ello, estando en la rama experimental, puedes lanzar el siguiente comando.
+
+```git
+git merge master -m 'Un mensaje del merge de master en el branch experimental'
+```
+
+Ya lo tienes! ahora tu rama está actualizada con todos los cambios en master. Puedes seguir desarrollando tu rama experimental sabiendo que tienes el proyecto actualizado.
+
+## Subir una rama al repositorio remoto (Github o similares)
+
+Como habíamos dicho anteriormente, por mucho que hagas la operativa descrita para crear ramas en tu ordenador, y las puedas ver en tu repositorio local con `git branch`, las ramas no se publicarán en Github o cualquier otro hosting de repositorios remoto. Para que esto ocurra tienes que realizar específicamente la acción de subir una rama determinada.
+
+La operativa de publicar una rama en remoto la haces mediante el comando `push`, indicando la opción "-u" y el nombre de la rama que deseas subir. Por ejemplo de esta manera:
+
+```git
+git push -u origin experimental
+```
+
+Así estamos haciendo un push, empujando hacia origin (que es el nombre que se suele dar al repositorio remoto), la rama con nombre "experimental".
+
+Por cierto, si subimos el proyecto a Github podremos ver también un diagrama de las ramas que hemos ido creando y fusionando a master, en la sección Graps / Network.
+
+![img](https://desarrolloweb.com/archivoimg/general/3982.png)
+
+## Borrar una rama
+
+En ocasione puede ser necesario eliminar una rama del repositorio, por ejemplo porque nos hayamos equivocado en el nombre al crearla. Aquí la operativa puede ser diferente, dependiendo de si hemos subido ya esa rama a remoto o si todavía solamente está en local.
+
+### Borrado de la rama en local
+
+Esto lo conseguimos con el comando git branch, solamente que ahora usamos la opción "-d" para indicar que esa rama queremos borrarla.
+
+```git
+git branch -d rama_a_borrar
+```
+
+Sin embargo, puede que esta acción no nos funcione porque hayamos hecho cambios que no se hayan salvado en el repositorio remoto, o no se hayan fusionado con otras ramas. En el caso que queramos forzar el borrado de la rama, para eliminarla independientemente de si se ha hecho el push o el merge, tendrás que usar la opción "-D".
+
+```git
+git branch -D rama_a_borrar
+```
+
+Debes prestar especial atención a esta opción "-D", ya que al eliminar de este modo pueden haber cambios que ya no se puedan recuperar. Como puedes apreciar, es bastante fácil de confundir con "-d", opción más segura, ya que no permite borrado de ramas en situaciones donde se pueda perder código.
+
+### Eliminar un branch en remoto
+
+Si la rama que queremos eliminar está en el repositorio remoto, la operativa es un poco diferente. Tenemos que hacer un push, indicando la opción --delete, seguida de la rama que se desea borrar.
+
+```git
+git push origin --delete rama_a_borrar
+```
